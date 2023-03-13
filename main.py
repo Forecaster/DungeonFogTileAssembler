@@ -66,15 +66,15 @@ while True:
 						ext = tile['ext']
 					image = Image.open(os.path.join(path, tile['filename']))
 					tiles[(tile['x'],tile['y'])] = image
-				print(tiles)
+				# print(tiles)
 				max_x = max(x for x, y in tiles.keys())
 				max_y = max(y for x, y in tiles.keys())
 				width, height = tiles[(1, 1)].size
-				print(width, height)
+				# print(width, height)
 
 				total_width = width * max_x
 				total_height = height * max_y
-				print(total_width, total_height)
+				# print(total_width, total_height)
 				assembled_map = Image.new("RGB", (total_width, total_height))
 				for x in range(max_x + 1):
 					for y in range(max_y + 1):

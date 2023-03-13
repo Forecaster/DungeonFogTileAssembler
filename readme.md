@@ -13,7 +13,7 @@ The input folder can contain tiles from multiple different maps. They will all b
 If one or more tile images are missing the corresponding spots will be left as a blank black spot on the assembled map image.
 
 ## Output
-A subfolder called `output` will be created and assembled maps will be put here. Finished maps will be named `MapName.ext`, where `MapName` is the first part of the tile name and `ext` is the extension of the tile images.
+A subfolder called `output` will be created in the selected directory and assembled maps will be put here. Finished maps will be named `MapName.ext`, where `MapName` is the first part of the tile name and `ext` is the extension of the tile images.
 
 ## Libraries
 This program uses Pillow to assemble the images and PySimpleGUI to generate the interface and handle user input.

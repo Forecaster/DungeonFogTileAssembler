@@ -6,10 +6,7 @@ import os
 title = "DungeonFog Map Tile Assembler"
 gui.theme("DarkAmber")
 
-# default_dir = os.getcwd()
-default_dir = "E:/Core - Development/Python/SingleFiles/DungeonFogTileAssembler/map"
-
-# default_text = "Choose a directory"
+default_dir = os.getcwd()
 default_text = default_dir
 
 layout = [

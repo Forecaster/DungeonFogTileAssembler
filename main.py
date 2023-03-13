@@ -12,13 +12,14 @@ default_text = default_dir
 layout = [
 	[gui.Text(title)],
 	[],
-	[gui.InputText(default_text, key="-INPUT-", expand_x=True)],
+	[gui.InputText(default_text, key="-INPUT-", size=(100, 1))],
 	[gui.FolderBrowse("Browse", key="-DIRECTORY-", initial_folder=default_dir, enable_events=True)],
+	[gui.Button("Start", key="-START-")],
 	[gui.Text("", key="-OUTPUT-", text_color="red")],
-	[gui.Button("Start", key="-START-")]
+	[gui.Multiline("", key="-FILE_LIST-", expand_x=True, horizontal_scroll=False, disabled=True, size=(0, 10))],
 ]
 
-w = gui.Window(title, layout, size=(600, 180), resizable=True)
+w = gui.Window(title, layout, resizable=True)
 
 while True:
 	event, values = w.read()
@@ -31,6 +32,8 @@ while True:
 		if not os.path.isdir(path):
 			w['-OUTPUT-'].Update("Path is not a directory.")
 		else:
+			failed = []
+			assembled = []
 			w['-OUTPUT-'].Update("")
 			maps = {}
 			pattern = re.compile("(.*)_tile_\d+_(\d+),(\d+)$")
@@ -48,7 +51,11 @@ while True:
 					y = int(matches[2])
 					if not maps.keys().__contains__(map_name):
 						maps[map_name] = []
-					maps[map_name].append({ "x": x, "y": y, "filename": f, "name": name, "ext": ext })
+					size = os.path.getsize(os.path.join(path, f))
+					if size == 0:
+						failed.append({ "filename": f, "reason": "size 0 bytes" })
+					else:
+						maps[map_name].append({ "x": x, "y": y, "filename": f, "name": name, "ext": ext })
 			# print(maps)
 
 			for map in maps:
@@ -79,4 +86,20 @@ while True:
 				output_path = os.path.join(path, "output")
 				if not os.path.exists(output_path):
 					os.mkdir(output_path)
-				assembled_map.save(os.path.join(output_path, map + ext))
+				assembled_path = os.path.join(output_path, map + ext)
+				assembled_map.save(assembled_path)
+				assembled.append(assembled_path)
+			output_text = "Assembled maps:\n" + "\n".join(assembled)
+			if len(failed) > 0:
+				s = "s"
+				if len(failed) == 1:
+					s = ""
+				w['-OUTPUT-'].Update("Completed, but failed to load " + str(len(failed)) + " tile" + s + ".", text_color="red")
+				output_text += "\n\nFailed tiles:\n"
+				append_strings = []
+				for fail in failed:
+					append_strings.append(fail['filename'] + " (" + fail['reason'] + ")")
+				output_text += "\n".join(append_strings)
+			else:
+				w['-OUTPUT-'].Update("Completed!", text_color="green")
+			w['-FILE_LIST-'].Update(output_text)

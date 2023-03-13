@@ -12,6 +12,8 @@ The input folder can contain tiles from multiple different maps. They will all b
 
 If one or more tile images are missing the corresponding spots will be left as a blank black spot on the assembled map image.
 
+If one or more tile images have a size of 0 bytes the corresponding spots will be left blank on the map. These files will be listed in the output box in the main window.
+
 ## Output
 A subfolder called `output` will be created in the selected directory and assembled maps will be put here. Finished maps will be named `MapName.ext`, where `MapName` is the first part of the tile name and `ext` is the extension of the tile images.
 
